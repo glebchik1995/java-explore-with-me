@@ -32,7 +32,7 @@ public class StatClient extends BaseClient {
     }
 
     public ResponseEntity<Object> saveHit(EndpointHitDto endpointHitDto) {
-        return post(endpointHitDto);
+        return post("/hit", endpointHitDto);
     }
 
     public ResponseEntity<Object> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
@@ -43,7 +43,7 @@ public class StatClient extends BaseClient {
                 "end", end.format(formatter),
                 "uris", uris,
                 "unique", unique);
-        return get(parameters);
+        return get("?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
 
     }
 }

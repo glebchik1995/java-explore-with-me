@@ -3,6 +3,7 @@ package ru.practicum.stats_server.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.stats_server.entity.EndpointHit;
@@ -31,13 +32,10 @@ public class EndpointHitServiceImpl implements EndpointHitService {
     @Transactional(readOnly = true)
     @Override
     public List<ViewStatsDto> getViewStats(LocalDateTime startTime, LocalDateTime endTime, List<String> uri, Boolean unique) {
-        if (uri == null) {
-            return unique ? repository.getAllUniqueWhereCreatedBetweenStartAndEnd(startTime, endTime) :
-                    repository.getAllWhereCreatedBetweenStartAndEnd(startTime, endTime);
-        } else {
-            return unique ? repository.getAllUniqueWhereCreatedBetweenStartAndEndAndUriInList(startTime, endTime, uri) :
-                    repository.getAllWhereCreatedBetweenStartAndEndAndUriInList(startTime, endTime, uri);
-        }
+        return (CollectionUtils.isEmpty(uri)) ?
+                (unique ? repository.findAllDistinct(startTime, endTime) : repository.findAll(startTime, endTime)) :
+                (unique ? repository.findAllByUriDistinct(startTime, endTime, uri) :
+                        repository.findAllByUri(startTime, endTime, uri));
     }
 }
 

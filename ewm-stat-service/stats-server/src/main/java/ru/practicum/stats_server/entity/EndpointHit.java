@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -14,6 +13,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "hit", schema = "public")
 public class EndpointHit {
@@ -35,17 +35,5 @@ public class EndpointHit {
     @Column(name = "timestamp", nullable = false)
     LocalDateTime timestamp;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EndpointHit hit = (EndpointHit) o;
-        return Objects.equals(id, hit.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
 

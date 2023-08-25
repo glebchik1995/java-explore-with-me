@@ -10,41 +10,34 @@ import java.util.List;
 
 public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> {
 
-    @Query(value =
-            "SELECT  new ru.practicum.dto.ViewStatsDto(eh.app, eh.uri, COUNT(DISTINCT eh.ip)) " +
-                    "FROM EndpointHit eh " +
-                    "WHERE eh.timestamp BETWEEN ?1 AND ?2 AND eh.uri IN ?3 " +
-                    "GROUP BY eh.uri, eh.app " +
-                    "ORDER BY COUNT(eh.ip) DESC"
-    )
-    List<ViewStatsDto> getAllUniqueWhereCreatedBetweenStartAndEndAndUriInList(LocalDateTime start, LocalDateTime end, List<String> uri);
+    @Query("SELECT new ru.practicum.dto.ViewStatsDto(h.app, h.uri, COUNT(distinct h.ip)) " +
+            "FROM EndpointHit as h " +
+            "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
+            "GROUP BY h.app, h.uri " +
+            "ORDER BY COUNT(distinct h.ip) desc")
+    List<ViewStatsDto> findAllDistinct(LocalDateTime start, LocalDateTime end);
 
-    @Query(value =
-            "SELECT  new ru.practicum.dto.ViewStatsDto(eh.app, eh.uri, COUNT(eh.ip)) " +
-                    "FROM EndpointHit eh " +
-                    "WHERE eh.timestamp BETWEEN ?1 AND ?2 " +
-                    "AND eh.uri IN ?3 " +
-                    "GROUP BY eh.uri, eh.app " +
-                    "ORDER BY COUNT(eh.ip) DESC"
-    )
-    List<ViewStatsDto> getAllWhereCreatedBetweenStartAndEndAndUriInList(LocalDateTime start, LocalDateTime end, List<String> uri);
+    @Query("SELECT new ru.practicum.dto.ViewStatsDto(h.app, h.uri, COUNT(h.ip)) " +
+            "FROM EndpointHit as h " +
+            "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
+            "GROUP BY h.app, h.uri " +
+            "ORDER BY COUNT(h.ip) desc")
+    List<ViewStatsDto> findAll(LocalDateTime start, LocalDateTime end);
 
-    @Query(value =
-            "SELECT new ru.practicum.dto.ViewStatsDto(eh.app, eh.uri, COUNT(DISTINCT eh.ip)) " +
-                    "FROM EndpointHit eh " +
-                    "WHERE eh.timestamp BETWEEN ?1 AND ?2 " +
-                    "GROUP BY eh.uri, eh.app " +
-                    "ORDER BY COUNT(eh.ip) DESC"
-    )
-    List<ViewStatsDto> getAllUniqueWhereCreatedBetweenStartAndEnd(LocalDateTime start, LocalDateTime end);
+    @Query("SELECT new ru.practicum.dto.ViewStatsDto(h.app, h.uri, COUNT(distinct h.ip)) " +
+            "FROM EndpointHit as h " +
+            "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
+            "AND h.uri IN (?3) " +
+            "GROUP BY h.app, h.uri " +
+            "ORDER BY COUNT(distinct h.ip) desc")
+    List<ViewStatsDto> findAllByUriDistinct(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    @Query(value =
-            "SELECT new ru.practicum.dto.ViewStatsDto(eh.app, eh.uri, COUNT(eh.ip)) " +
-                    "FROM EndpointHit eh " +
-                    "WHERE eh.timestamp BETWEEN ?1 AND ?2 " +
-                    "GROUP BY eh.uri, eh.app " +
-                    "ORDER BY COUNT(eh.ip) DESC"
-    )
-    List<ViewStatsDto> getAllWhereCreatedBetweenStartAndEnd(LocalDateTime start, LocalDateTime end);
+    @Query("SELECT new ru.practicum.dto.ViewStatsDto(h.app, h.uri, COUNT(h.ip)) " +
+            "FROM EndpointHit as h " +
+            "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
+            "AND h.uri IN (?3) " +
+            "GROUP BY h.app, h.uri " +
+            "ORDER BY COUNT(h.ip) desc")
+    List<ViewStatsDto> findAllByUri(LocalDateTime start, LocalDateTime end, List<String> uris);
 
 }
