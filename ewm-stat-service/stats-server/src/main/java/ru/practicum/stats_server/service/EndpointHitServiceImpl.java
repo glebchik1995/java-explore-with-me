@@ -9,7 +9,6 @@ import ru.practicum.stats_server.entity.EndpointHit;
 import ru.practicum.stats_server.repository.EndpointHitRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static ru.practicum.stats_server.mapper.EndpointHitMapper.toEndpointHitDto;
@@ -31,9 +30,7 @@ public class EndpointHitServiceImpl implements EndpointHitService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ViewStatsDto> getViewStats(String start, String end, List<String> uri, Boolean unique) {
-        LocalDateTime startTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime endTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    public List<ViewStatsDto> getViewStats(LocalDateTime startTime, LocalDateTime endTime, List<String> uri, Boolean unique) {
         if (uri == null) {
             return unique ? repository.getAllUniqueWhereCreatedBetweenStartAndEnd(startTime, endTime) :
                     repository.getAllWhereCreatedBetweenStartAndEnd(startTime, endTime);
