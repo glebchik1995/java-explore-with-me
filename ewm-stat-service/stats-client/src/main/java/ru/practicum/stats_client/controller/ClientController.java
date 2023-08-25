@@ -3,6 +3,7 @@ package ru.practicum.stats_client.controller;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,8 +32,8 @@ public class ClientController {
 
     @GetMapping("/stats")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> getViewStats(@RequestParam @JsonFormat(pattern = DATE_FORMAT) LocalDateTime start,
-                                               @RequestParam @JsonFormat(pattern = DATE_FORMAT) LocalDateTime end,
+    public ResponseEntity<Object> getViewStats(@RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime start,
+                                               @RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime end,
                                                @RequestParam(required = false, name = "uris") List<String> uris,
                                                @RequestParam(required = false, defaultValue = "false") Boolean unique) {
         log.info("GET stats: start={}, end={}, uris={}, unique={}", start, end, uris, unique);
