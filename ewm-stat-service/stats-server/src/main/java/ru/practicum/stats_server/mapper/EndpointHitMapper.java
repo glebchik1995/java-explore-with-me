@@ -30,6 +30,7 @@ public class EndpointHitMapper {
 
     public static ViewStatsDto toViewStatsDto(EndpointHit hit) {
         return ViewStatsDto.builder()
+                .hits(hit.getId())
                 .app(hit.getApp())
                 .uri(hit.getUri())
                 .build();
