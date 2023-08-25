@@ -12,6 +12,7 @@ import ru.practicum.stats_server.service.EndpointHitService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -33,10 +34,13 @@ public class StatsController {
 
     @GetMapping("/stats")
     @ResponseStatus(HttpStatus.OK)
-    public List<ViewStatsDto> getViewStats(@DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime start,
-                                           @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime end,
+    public List<ViewStatsDto> getViewStats(@RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime start,
+                                           @RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime end,
                                            @RequestParam(required = false) List<String> uris,
                                            @RequestParam(defaultValue = "false") Boolean unique) {
+        if (uris == null) {
+            uris = Collections.emptyList();
+        }
         log.info("GET stats: start={}, end={}, uris={}, unique={}", start, end, uris, unique);
         return service.getViewStats(start, end, uris, unique);
     }
