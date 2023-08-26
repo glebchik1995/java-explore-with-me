@@ -41,4 +41,3 @@ public class EndpointHitServiceImpl implements EndpointHitService {
                         : repository.getAllByTimestampAndUriNotUnique(uris, start, end);
     }
 }
-
