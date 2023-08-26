@@ -11,7 +11,7 @@ import ru.practicum.stats.repository.EndpointHitRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import static ru.practicum.stats.mapper.EndpointHitMapper.toEndpointHitDto;
 import static ru.practicum.stats.mapper.EndpointHitMapper.toEndpointHitModel;
@@ -32,7 +32,7 @@ public class EndpointHitServiceImpl implements EndpointHitService {
     @Transactional(readOnly = true)
     public Collection<ViewStatsDto> getViewStats(LocalDateTime start,
                                                  LocalDateTime end,
-                                                 List<String> uris,
+                                                 Set<String> uris,
                                                  Boolean unique) {
 
         return

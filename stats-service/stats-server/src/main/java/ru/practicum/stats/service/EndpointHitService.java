@@ -6,7 +6,7 @@ import ru.practicum.stats.dto.ViewStatsDto;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 public interface EndpointHitService {
 
@@ -14,7 +14,7 @@ public interface EndpointHitService {
 
     Collection<ViewStatsDto>  getViewStats(LocalDateTime start,
                                            LocalDateTime end,
-                                           List<String> uris,
+                                           Set<String> uris,
                                            Boolean unique);
 
 }

@@ -7,6 +7,7 @@ import ru.practicum.stats.model.EndpointHit;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> {
 
@@ -18,7 +19,7 @@ public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> 
                     " GROUP BY h.app, h.uri" +
                     " ORDER BY COUNT(h.ip) DESC"
     )
-    List<ViewStatsDto> getAllByTimestampAndUriNotUnique(List<String> uris,
+    List<ViewStatsDto> getAllByTimestampAndUriNotUnique(Set<String> uris,
                                                         LocalDateTime start,
                                                         LocalDateTime end);
 
@@ -30,7 +31,7 @@ public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> 
                     " GROUP BY h.app, h.uri" +
                     " ORDER BY COUNT(DISTINCT h.ip) DESC"
     )
-    List<ViewStatsDto> getAllHitsByTimestampAndUriUnique(List<String> uris,
+    List<ViewStatsDto> getAllHitsByTimestampAndUriUnique(Set<String> uris,
                                                          LocalDateTime start,
                                                          LocalDateTime end);
 }
