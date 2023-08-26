@@ -34,4 +34,3 @@ public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> 
                                                          LocalDateTime start,
                                                          LocalDateTime end);
 }
-
