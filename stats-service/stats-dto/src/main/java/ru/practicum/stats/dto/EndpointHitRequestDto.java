@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 import static ru.practicum.stats.util.Constant.TIME_PATTERN;
@@ -17,12 +18,15 @@ import static ru.practicum.stats.util.Constant.TIME_PATTERN;
 public class EndpointHitRequestDto {
 
     @NotBlank
+    @Size(max = 255)
     String app;
 
     @NotBlank
+    @Size(max = 255)
     String uri;
 
     @NotBlank
+    @Size(max = 255)
     String ip;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_PATTERN)
