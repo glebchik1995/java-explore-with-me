@@ -31,7 +31,7 @@ public class StatsController {
         return service.saveEndpointHit(dto);
     }
 
-    @GetMapping(value ="/stats")
+    @GetMapping(value = "/stats")
     public List<ViewStatsDto> getViewStats(@RequestParam @DateTimeFormat(pattern = TIME_PATTERN) LocalDateTime start,
                                            @RequestParam @DateTimeFormat(pattern = TIME_PATTERN) LocalDateTime end,
                                            @RequestParam(required = false) List<String> uris,
