@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 import static ru.practicum.stats.util.Constant.TIME_PATTERN;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
+@Builder(toBuilder = true)
 public class EndpointHitRequestDto {
 
     @NotBlank

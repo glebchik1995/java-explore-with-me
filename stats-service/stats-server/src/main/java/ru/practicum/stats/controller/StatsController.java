@@ -3,7 +3,7 @@ package ru.practicum.stats.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.stats.dto.EndpointHitRequestDto;
 import ru.practicum.stats.dto.EndpointHitResponseDto;
@@ -12,30 +12,30 @@ import ru.practicum.stats.service.EndpointHitService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
-import static ru.practicum.stats.util.Constant.TIME_PATTERN;
+import static ru.practicum.stats.util.Constant.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping
 @Slf4j
-@Validated
 public class StatsController {
 
     private final EndpointHitService service;
 
-    @PostMapping("/hit")
+    @PostMapping(value = HIT_ENDPOINT)
+    @ResponseStatus(HttpStatus.CREATED)
     public EndpointHitResponseDto saveHit(@Valid @RequestBody EndpointHitRequestDto dto) {
         log.info("POST hit={}", dto);
         return service.saveEndpointHit(dto);
     }
 
-    @GetMapping("/stats")
-    public Collection<ViewStatsDto> getViewStats(@RequestParam @DateTimeFormat(pattern = TIME_PATTERN) LocalDateTime start,
-                                                 @RequestParam @DateTimeFormat(pattern = TIME_PATTERN) LocalDateTime end,
-                                                 @RequestParam(required = false) Set<String> uris,
-                                                 @RequestParam(defaultValue = "false") Boolean unique) {
+    @GetMapping(value = STATS_ENDPOINT)
+    public List<ViewStatsDto> getViewStats(@RequestParam @DateTimeFormat(pattern = TIME_PATTERN) LocalDateTime start,
+                                           @RequestParam @DateTimeFormat(pattern = TIME_PATTERN) LocalDateTime end,
+                                           @RequestParam(required = false) List<String> uris,
+                                           @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("GET stats: start={}, end={}, uris={}, unique={}", start, end, uris, unique);
         return service.getViewStats(start, end, uris, unique);
     }

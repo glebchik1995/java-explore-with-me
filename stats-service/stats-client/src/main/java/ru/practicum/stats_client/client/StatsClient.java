@@ -32,7 +32,7 @@ public class StatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end,
-                                           List<String> uris, boolean unique) {
+                                           List<String> uris, Boolean unique) {
 
         Map<String, Object> parameters = Map.of(
                 "start", start.format(formatter),

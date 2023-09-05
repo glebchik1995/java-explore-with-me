@@ -8,12 +8,11 @@ import java.time.LocalDateTime;
 
 import static ru.practicum.stats.util.Constant.TIME_PATTERN;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
+@Builder(toBuilder = true)
 public class EndpointHitResponseDto {
 
     Long id;
@@ -24,6 +23,6 @@ public class EndpointHitResponseDto {
 
     String ip;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_PATTERN)
+    @JsonFormat(pattern = TIME_PATTERN)
     LocalDateTime timestamp;
 }
