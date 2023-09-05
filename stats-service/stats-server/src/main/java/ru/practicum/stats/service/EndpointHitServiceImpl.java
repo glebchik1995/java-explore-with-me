@@ -10,8 +10,7 @@ import ru.practicum.stats.model.EndpointHit;
 import ru.practicum.stats.repository.EndpointHitRepository;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import static ru.practicum.stats.mapper.EndpointHitMapper.toEndpointHitDto;
 import static ru.practicum.stats.mapper.EndpointHitMapper.toEndpointHitModel;
@@ -30,15 +29,11 @@ public class EndpointHitServiceImpl implements EndpointHitService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<ViewStatsDto> getViewStats(LocalDateTime start,
-                                                 LocalDateTime end,
-                                                 Set<String> uris,
-                                                 Boolean unique) {
-
-        return
-                unique
-                        ? repository.getAllHitsByTimestampAndUriUnique(uris, start, end)
-                        : repository.getAllByTimestampAndUriNotUnique(uris, start, end);
+    public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        if (unique) {
+            return repository.findUniqueStats(start, end, uris);
+        } else {
+            return repository.findStats(start, end, uris);
+        }
     }
 }
-

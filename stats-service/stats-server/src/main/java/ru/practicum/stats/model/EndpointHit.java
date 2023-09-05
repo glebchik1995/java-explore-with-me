@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "id")
 @Table(name = "hit", schema = "public")
 public class EndpointHit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     Long id;
 
     @Column(name = "app")
