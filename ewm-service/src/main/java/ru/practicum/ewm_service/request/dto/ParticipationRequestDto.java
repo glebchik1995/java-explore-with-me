@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm_service.util.enums.Status;
 
 import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
