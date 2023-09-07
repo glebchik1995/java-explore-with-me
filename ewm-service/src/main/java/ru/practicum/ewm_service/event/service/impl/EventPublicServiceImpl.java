@@ -57,7 +57,7 @@ public class EventPublicServiceImpl implements EventPublicService {
         }
         if (onlyAvailable) {
             return answer.stream().filter(e -> e.getParticipantLimit() > e.getConfirmedRequests()
-                            || e.getParticipantLimit() == 0).collect(Collectors.toList());
+                    || e.getParticipantLimit() == 0).collect(Collectors.toList());
         }
         statClient.createStat(request);
         return answer;

@@ -29,7 +29,7 @@ public class UpdateEventAdminRequest {
     @Size(max = 7000, min = 20)
     String description;
 
-    @JsonFormat( shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     LocalDateTime eventDate;
 
     @Valid

@@ -3,6 +3,7 @@ package ru.practicum.ewm_service.event.mapper;
 import lombok.experimental.UtilityClass;
 import ru.practicum.ewm_service.event.dto.LocationDto;
 import ru.practicum.ewm_service.event.model.Location;
+
 @UtilityClass
 public class LocationMapper {
 

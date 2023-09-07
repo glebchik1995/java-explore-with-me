@@ -41,7 +41,7 @@ public class EventAdminServiceImpl implements EventAdminService {
     @Override
     @Transactional(readOnly = true)
     public List<EventDto> searchEvents(List<Long> users, List<State> states, List<Long> categories,
-                                             LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+                                       LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         if (rangeEnd != null && rangeStart != null && rangeStart.isAfter(rangeEnd)) {
             throw new IllegalArgumentException("Неверно задано дата и время");
         }
@@ -61,7 +61,7 @@ public class EventAdminServiceImpl implements EventAdminService {
         }
         if (updateEvent.getStateAction() != null) {
             if (!event.getState().equals(PENDING)) {
-                throw new ConflictException("Изменять можно только события со статусом: PENDING");
+                throw new ConflictException("Изменять можно только события со статусом: PENDING или отмененные");
             }
             switch (updateEvent.getStateAction()) {
                 case REJECT_EVENT:
