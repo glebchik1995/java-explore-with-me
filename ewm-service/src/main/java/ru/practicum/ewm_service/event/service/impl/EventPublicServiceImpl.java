@@ -73,11 +73,9 @@ public class EventPublicServiceImpl implements EventPublicService {
             throw new DataNotFoundException("Событие должно быть опубликовано");
         }
         statClient.createStat(request);
-
         EventDto eventDto = EventMapper.toEventDto(event);
         eventDto.setConfirmedRequests(requestRepository.findConfirmedRequests(eventDto.getId()));
         eventDto.setViews(statClient.getView(eventDto.getId()));
-        statClient.createStat(request);
         return eventDto;
     }
 }
