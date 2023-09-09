@@ -12,6 +12,7 @@ import ru.practicum.ewm_service.event.repository.EventRepository;
 import ru.practicum.ewm_service.event.service.EventPublicService;
 import ru.practicum.ewm_service.exception.exception.BadRequestException;
 import ru.practicum.ewm_service.exception.exception.DataNotFoundException;
+import ru.practicum.ewm_service.request.repository.RequestRepository;
 import ru.practicum.ewm_service.util.enums.Sorts;
 import ru.practicum.ewm_service.util.enums.State;
 
@@ -25,9 +26,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EventPublicServiceImpl implements EventPublicService {
+
     private final EventRepository eventRepository;
-    private final EventMapper eventMapper;
     private final Client statClient;
+    private final RequestRepository requestRepository;
 
     @Override
     public List<EventDto> getEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
@@ -40,10 +42,10 @@ public class EventPublicServiceImpl implements EventPublicService {
         List<EventDto> answer;
         if (rangeEnd == null && rangeStart == null) {
             answer = eventRepository.findAllByPublicNoDate(text, categories, paid, LocalDateTime.now(), page).stream()
-                    .map(eventMapper::toEventDto).collect(Collectors.toList());
+                    .map(EventMapper::toEventDto).collect(Collectors.toList());
         } else {
             answer = eventRepository.findAllByPublic(text, categories, paid, rangeStart, rangeEnd, page).stream()
-                    .map(eventMapper::toEventDto).collect(Collectors.toList());
+                    .map(EventMapper::toEventDto).collect(Collectors.toList());
         }
         if (sorts != null) {
             switch (sorts) {
@@ -56,8 +58,8 @@ public class EventPublicServiceImpl implements EventPublicService {
             }
         }
         if (onlyAvailable) {
-            return answer.stream().filter(e -> e.getParticipantLimit() > e.getConfirmedRequests()
-                    || e.getParticipantLimit() == 0).collect(Collectors.toList());
+            return answer.stream().filter(eventDto -> eventDto.getParticipantLimit() > eventDto.getConfirmedRequests()
+                            || eventDto.getParticipantLimit() == 0).collect(Collectors.toList());
         }
         statClient.createStat(request);
         return answer;
@@ -71,6 +73,11 @@ public class EventPublicServiceImpl implements EventPublicService {
             throw new DataNotFoundException("Событие должно быть опубликовано");
         }
         statClient.createStat(request);
-        return eventMapper.toEventDto(event);
+
+        EventDto eventDto = EventMapper.toEventDto(event);
+        eventDto.setConfirmedRequests(requestRepository.findConfirmedRequests(eventDto.getId()));
+        eventDto.setViews(statClient.getView(eventDto.getId()));
+        statClient.createStat(request);
+        return eventDto;
     }
 }

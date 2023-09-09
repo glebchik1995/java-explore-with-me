@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm_service.category.repository.CategoryRepository;
+import ru.practicum.ewm_service.client.Client;
 import ru.practicum.ewm_service.event.dto.EventDto;
 import ru.practicum.ewm_service.event.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm_service.event.mapper.EventMapper;
@@ -18,6 +19,7 @@ import ru.practicum.ewm_service.event.service.EventAdminService;
 import ru.practicum.ewm_service.exception.exception.BadRequestException;
 import ru.practicum.ewm_service.exception.exception.ConflictException;
 import ru.practicum.ewm_service.exception.exception.DataNotFoundException;
+import ru.practicum.ewm_service.request.repository.RequestRepository;
 import ru.practicum.ewm_service.util.enums.State;
 
 import java.time.LocalDateTime;
@@ -35,8 +37,9 @@ public class EventAdminServiceImpl implements EventAdminService {
 
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
-    private final EventMapper eventMapper;
     private final LocationRepository locationRepository;
+    private final RequestRepository requestRepository;
+    private final Client client;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,8 +49,14 @@ public class EventAdminServiceImpl implements EventAdminService {
             throw new IllegalArgumentException("Неверно задано дата и время");
         }
         PageRequest page = PageRequest.of(from / size, size);
-        return eventRepository.findAllAdminByData(users, states, categories, rangeStart, rangeEnd, page).stream()
-                .map(eventMapper::toEventDto).collect(Collectors.toList());
+        List<EventDto> answer = eventRepository.findAllAdminByData(users, states, categories, rangeStart, rangeEnd, page)
+                .stream()
+                .map(EventMapper::toEventDto)
+                .collect(Collectors.toList());
+        answer.forEach(e ->
+                e.setConfirmedRequests(requestRepository.findConfirmedRequests(e.getId())));
+        answer.forEach(e -> e.setViews(client.getView(e.getId())));
+        return answer;
     }
 
     @Override
@@ -61,7 +70,7 @@ public class EventAdminServiceImpl implements EventAdminService {
         }
         if (updateEvent.getStateAction() != null) {
             if (!event.getState().equals(PENDING)) {
-                throw new ConflictException("Изменять можно только события со статусом: PENDING или отмененные");
+                throw new ConflictException("Изменять можно только события со статусом: PENDING");
             }
             switch (updateEvent.getStateAction()) {
                 case REJECT_EVENT:
@@ -94,6 +103,9 @@ public class EventAdminServiceImpl implements EventAdminService {
         Optional.ofNullable(updateEvent.getParticipantLimit()).ifPresent(event::setParticipantLimit);
         Optional.ofNullable(updateEvent.getRequestModeration()).ifPresent(event::setRequestModeration);
         Optional.ofNullable(updateEvent.getTitle()).ifPresent(event::setTitle);
-        return eventMapper.toEventDto(eventRepository.save(event));
+        EventDto eventDto = EventMapper.toEventDto(event);
+        eventDto.setConfirmedRequests(requestRepository.findConfirmedRequests(eventDto.getId()));
+        eventDto.setViews(client.getView(eventDto.getId()));
+        return eventDto;
     }
 }
