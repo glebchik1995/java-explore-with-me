@@ -33,8 +33,8 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
-                                  @RequestParam(defaultValue = DEF_VAL_FROM) Integer from,
-                                  @RequestParam(defaultValue = DEF_VAL_SIZE) Integer size) {
+                                  @RequestParam(value = "from", defaultValue = DEF_VAL_FROM) Integer from,
+                                  @RequestParam(value = "size", defaultValue = DEF_VAL_SIZE) Integer size) {
         log.info("GET запрос на получение списка пользователей");
         return userService.getAllUsers(ids, from, size);
     }

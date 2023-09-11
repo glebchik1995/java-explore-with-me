@@ -34,8 +34,8 @@ public class EventAdminController {
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = DEF_VAL_FROM) @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = DEF_VAL_SIZE) @Positive Integer size) {
+            @RequestParam(value = "from", defaultValue = DEF_VAL_FROM) @PositiveOrZero Integer from,
+            @RequestParam(value = "size", defaultValue = DEF_VAL_SIZE) @Positive Integer size) {
         log.info("GET запрос на получение списка событий");
         return eventService.searchEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }

@@ -27,8 +27,8 @@ public class CompilationPublicController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
-                                                @RequestParam(defaultValue = DEF_VAL_FROM) @PositiveOrZero Integer from,
-                                                @RequestParam(defaultValue = DEF_VAL_SIZE) @Positive Integer size) {
+                                                @RequestParam(value = "from", defaultValue = DEF_VAL_FROM) @PositiveOrZero Integer from,
+                                                @RequestParam(value = "size", defaultValue = DEF_VAL_SIZE) @Positive Integer size) {
         log.info("GET запрос на получение списка всех подборок");
         return compilationsService.getCompilations(pinned, from, size);
     }

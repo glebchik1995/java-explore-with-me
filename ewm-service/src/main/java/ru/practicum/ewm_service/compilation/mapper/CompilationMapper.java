@@ -12,7 +12,7 @@ import java.util.List;
 @UtilityClass
 public class CompilationMapper {
 
-    public static Compilation toCompilationModel(NewCompilationDto newCompilationDto, List<Event> events) {
+    public Compilation toCompilationModel(NewCompilationDto newCompilationDto, List<Event> events) {
         return Compilation.builder()
                 .title(newCompilationDto.getTitle())
                 .pinned(newCompilationDto.getPinned())
